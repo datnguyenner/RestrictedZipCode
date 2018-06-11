@@ -48,6 +48,7 @@ public class RestrictedZip implements Comparable<RestrictedZip> {
 
     }
 
+    // Construct an array of sorted RestrictedZip objects
     private RestrictedZip[] getSortedRestrictedZipRanges(final int[][] restrictedZipRanges) {
 
         final RestrictedZip[] restrictedZips = new RestrictedZip[restrictedZipRanges.length];
@@ -66,13 +67,17 @@ public class RestrictedZip implements Comparable<RestrictedZip> {
         final Deque<RestrictedZip> restrictedZipStack = new ArrayDeque<>();
         final RestrictedZip[] restrictedZips = getSortedRestrictedZipRanges(restrictedZipRanges);
 
+        // Return empty stack if there are no restricted zip codes in parameters
         if (restrictedZips.length < 1) {
             return restrictedZipStack;
         }
 
-        restrictedZipStack.push(restrictedZips[0]);
+        restrictedZipStack.push(restrictedZips[0]); // Push first range onto the stack
 
         for (int i = 1; i < restrictedZips.length; i++) {
+
+            // If current and previous range overlaps, pop out the top of the stack and push the merged range onto the
+            // stack
             if (isOverLap(restrictedZipStack.peek(), restrictedZips[i])) {
 
                 restrictedZipStack.push(mergeOverLap(restrictedZipStack.pop(), restrictedZips[i]));
